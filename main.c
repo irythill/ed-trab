@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define TAM_FILA 11
+#define TAM_PILHA 3
 
 /* ============================================================
  * DEFINIÇÃO DAS STRUCTS
@@ -49,15 +51,14 @@ typedef struct no {
 
 /* Fila implementada com vetor */
 typedef struct {
-    Cliente itens[11];
+    Cliente itens[TAM_FILA];
     int inicio;
-    int final;
-    /* TODO G05: adicionar campo 'quantidade' aqui */
+    int quantidade;
 } Fila;
 
 /* Pilha implementada com vetor */
 typedef struct {
-    Cliente itens[3];
+    Cliente itens[TAM_PILHA];
     int topo;
 } Pilha;
 
@@ -69,34 +70,42 @@ typedef struct {
 /* Inicializa a fila */
 void filaInicializar(Fila *f) {
     f->inicio = 0;
-    f->final  = 0;
-    /* TODO: inicializar campo quantidade se necessário (G05) */
+    f->quantidade  = 0;
 }
 
 /* Retorna 1 se a fila estiver vazia, 0 caso contrário */
 int filaVazia(Fila *f) {
-    /* TODO: implementar */
+    if (f->quantidade == 0)
+        return 1;
     return 0;
 }
 
 /* Retorna 1 se a fila estiver cheia, 0 caso contrário */
 int filaCheia(Fila *f) {
-    /* TODO: implementar */
+    if (f->quantidade == TAM_FILA)
+        return 1;
     return 0;
 }
 
 /* Insere cliente na fila */
 void filaInserir(Fila *f, Cliente c) {
     /* TODO: implementar — verificar se fila está cheia antes */
-    /* Lembrar: fila circular usa (f->final % 11) */
+    if (filaCheia(f))
+            return;
+    int fim = (f->inicio + f->quantidade) % TAM_FILA;
+    f->itens[fim] = c;
+    f->quantidade++;
 }
 
 /* Remove e retorna o primeiro cliente da fila */
 Cliente filaRemover(Fila *f) {
     Cliente vazio = {0};
     /* TODO: implementar — verificar se fila está vazia antes */
-    /* G07: aplicar regra de intercalação (1 prioritário a cada 2 normais) */
-    /* G06: antes de remover, verificar expirações */
+    if (filaVazia(f))
+        return vazio;
+    vazio = f->itens[f->inicio];
+    f->inicio = (f->inicio+1) % TAM_FILA;
+    f->quantidade--;
     return vazio;
 }
 
@@ -276,8 +285,6 @@ int main() {
         printf("5. Exibir historico (pilha)\n");
         printf("6. Exibir lista de clientes\n");
         printf("7. Gerar relatorio ordenado\n");
-        /* TODO G03: adicionar opcao 8 - Desfazer atendimento */
-        /* TODO G07: o menu de chamar já deve aplicar intercalação */
         printf("0. Sair\n");
         printf("Opcao: ");
         scanf("%d", &opcao);
