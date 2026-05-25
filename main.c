@@ -112,8 +112,20 @@ Cliente filaRemover(Fila *f) {
 /* Exibe o estado atual da fila */
 void filaExibir(Fila *f) {
     /* TODO: implementar — exibir senha e nome de cada cliente na fila */
-}
+    if (filaVazia(f)){
+        printf("A fila esta vazia.");
+        return;
+    }
 
+    for (int i = 0; i < f -> quantidade; i++) {
+
+        int posicao = (f->inicio + i) % TAM_FILA;
+
+        printf("senha: %03d, nome: %s\n",
+            f->itens[posicao].senha,
+            f->itens[posicao].nome);
+    }
+}
 
 /* ============================================================
  * FUNÇÕES DA PILHA (HISTÓRICO)
