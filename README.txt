@@ -10,6 +10,7 @@ Gabriel Borba dos Santos:
 - filaVazia
 - filaInserir
 - filaRemover
+- filaExibir
 
 Henrique De Souza Pereira:
 Luiz Henrique de Moraes Chagas:
