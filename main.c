@@ -89,7 +89,6 @@ int filaCheia(Fila *f) {
 
 /* Insere cliente na fila */
 void filaInserir(Fila *f, Cliente c) {
-    /* TODO: implementar — verificar se fila está cheia antes */
     if (filaCheia(f))
             return;
     int fim = (f->inicio + f->quantidade) % TAM_FILA;
@@ -100,13 +99,41 @@ void filaInserir(Fila *f, Cliente c) {
 /* Remove e retorna o primeiro cliente da fila */
 Cliente filaRemover(Fila *f) {
     Cliente vazio = {0};
-    /* TODO: implementar — verificar se fila está vazia antes */
-    if (filaVazia(f))
+
+    if (filaVazia(f)) {
+        printf("Fila vazia.\n");
         return vazio;
-    vazio = f->itens[f->inicio];
-    f->inicio = (f->inicio+1) % TAM_FILA;
+    }
+
+    /* Encontra a posicao do primeiro prioritario */
+    int posicaoRemover = 0;
+    for (int i = 0; i < f->quantidade; i++) {
+        int indice = (f->inicio + i) % TAM_FILA;
+        if (f->itens[indice].prioritario == 1) {
+            posicaoRemover = i;
+            break;
+        }
+    }
+
+    int indiceRemover = (f->inicio + posicaoRemover) % TAM_FILA;
+    Cliente removido = f->itens[indiceRemover];
+
+    /* Remove o primeiro */
+    if (posicaoRemover == 0) {
+        f->inicio = (f->inicio + 1) % TAM_FILA;
+        f->quantidade--;
+        return removido;
+    }
+
+    /* Remove do meio da fila */
+    for (int i = posicaoRemover; i < f->quantidade - 1; i++) {
+        int destino = (f->inicio + i) % TAM_FILA;
+        int origem = (f->inicio + i + 1) % TAM_FILA;
+        f->itens[destino] = f->itens[origem];
+    }
     f->quantidade--;
-    return vazio;
+
+    return removido;
 }
 
 /* Exibe o estado atual da fila */
