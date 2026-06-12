@@ -174,11 +174,36 @@ void pilhaExibir(Pilha *p) {
 /* Insere cliente na lista */
 No* listaInserir(No *inicio, Cliente c) {
     No *noh = (No*)malloc(sizeof(No));
+    if(noh == NULL) {
+        printf("Erro ao alocar memoria. \n");
+        return inicio;
+    }
     noh->dado = c;
-    /* TODO: implementar inserção */
-    /* G01: manter lista ordenada por senha na inserção */
-    noh->prox = inicio;
-    return noh;
+    noh->prox = NULL;
+
+    /* Lista vazia */
+    if (inicio == NULL) {
+        return noh;
+    }
+
+    /* Insere no início */
+    if (c.senha < inicio->dado.senha) {
+        noh->prox = inicio;
+        return noh;
+    }
+
+    /* Insere no meio ou no fim */
+    No *anterior = inicio;
+    No *atual = inicio->prox;
+
+    while (atual != NULL && atual->dado.senha < c.senha) {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    anterior->prox = noh;
+    noh->prox = atual;
+    return inicio;
 }
 
 /* Remove cliente da lista pelo número da senha */
