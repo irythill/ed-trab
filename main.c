@@ -160,37 +160,61 @@ void filaExibir(Fila *f) {
 
 /* Inicializa a pilha */
 void pilhaInicializar(Pilha *p) {
-    p->topo = -1;
+    p->topo = -1; //Inicializa pilha no vetor -1
 }
 
 /* Retorna 1 se a pilha estiver vazia, 0 caso contrário */
 int pilhaVazia(Pilha *p) {
     /* TODO: implementar */
-    return 0;
+    if(p->topo == -1) //Se topo for -1 = pilha vazia
+        return 1;
+    else
+        return 0;
 }
 
 /* Retorna 1 se a pilha estiver cheia, 0 caso contrário */
 int pilhaCheia(Pilha *p) {
     /* TODO: implementar */
-    return 0;
+    if(p->topo == TAM_PILHA -1) // Se o topo for o mesmo valor do tamanho da pilha = cheia
+        return 1;
+    else
+        return 0;
 }
 
 /* Empilha cliente no histórico */
 void pilhaEmpilhar(Pilha *p, Cliente c) {
     /* TODO: implementar */
     /* G08: se cheia, descartar o mais antigo antes de empilhar */
+    if (pilhaCheia(p)){
+        printf("Pilha cheia, removendo o mais antigo e inserindo");
+        for (int i = 0; i < TAM_PILHA - 1; i++) {
+            p->itens[i] = p->itens[i+1]; //Move os elementos para esquerda
+        }
+        p->topo--; //Ajusta topo
+    };
+
+    p->topo++; //Reserva para o proximo cliente
+    p->itens[p->topo] = c; // Insere novo cliente
 }
 
 /* Desempilha e retorna o topo */
 Cliente pilhaDesempilhar(Pilha *p) {
-    Cliente vazio = {0};
+    Cliente vazio = {0}; //Cria cliente vazio
     /* TODO: implementar */
+    if(pilhaVazia(p)){
     return vazio;
+    }
+
+    Cliente removido = p->itens[p->topo]; //Zera as informações do indice(Itens)
+    p->topo--; // Ajeita topo, elimina Cliente
+    return removido;
 }
 
 /* Exibe o histórico de atendimentos */
 void pilhaExibir(Pilha *p) {
-    /* TODO: implementar */
+    for(int i = p->topo; i >= 0; i--) { //Percorre clientes
+        printf("Senha: %03d , Nome: %s", p->itens[i].senha, p->itens[i].nome); //Exibe itens de clientes (senha e nome)
+    }
 }
 
 
