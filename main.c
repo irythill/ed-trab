@@ -254,6 +254,18 @@ No* listaInserir(No *inicio, Cliente c) {
     return inicio;
 }
 
+/* Função auxiliar para copiar a lista para um vetor */
+void listaParaVetor(No *inicio, Cliente vet[], int *n) {
+    *n = 0;
+    No *atual = inicio;
+    while (atual != NULL) {
+        vet[*n] = atual->dado;
+        (*n)++;
+        atual = atual->prox;
+    }
+}
+
+
 /* Remove cliente da lista pelo número da senha */
 No* listaRemover(No *inicio, int senha) {
     if (inicio == NULL) {
