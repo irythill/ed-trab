@@ -19,6 +19,10 @@ Henrique De Souza Pereira:
 - listaParaVetor
 
 Luiz Henrique de Moraes Chagas:
+- busca sequencial
+- busca binaria
+- ordenação(bubble sort)
+
 Vinicius Dos Santos Cardoso:
 
 2. Qual foi a maior dificuldade? Como resolveram?
