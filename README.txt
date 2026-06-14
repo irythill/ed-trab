@@ -15,8 +15,8 @@ Gabriel Borba dos Santos:
 Henrique De Souza Pereira:
 - listaInserir
 - listaRemover
-- 
--
+- listaExibir
+- listaParaVetor
 
 Luiz Henrique de Moraes Chagas:
 Vinicius Dos Santos Cardoso:

@@ -270,7 +270,7 @@ void listaParaVetor(No *inicio, Cliente vet[], int *n) {
 No* listaRemover(No *inicio, int senha) {
     if (inicio == NULL) {
         printf("Lista vazia.\n");
-        return;
+        return NULL;
     }
 
     Cliente vetor[TAM_FILA];
