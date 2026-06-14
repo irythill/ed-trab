@@ -138,7 +138,6 @@ Cliente filaRemover(Fila *f) {
 
 /* Exibe o estado atual da fila */
 void filaExibir(Fila *f) {
-    /* TODO: implementar — exibir senha e nome de cada cliente na fila */
     if (filaVazia(f)){
         printf("A fila esta vazia.");
         return;
@@ -165,7 +164,7 @@ void pilhaInicializar(Pilha *p) {
 
 /* Retorna 1 se a pilha estiver vazia, 0 caso contrário */
 int pilhaVazia(Pilha *p) {
-    /* TODO: implementar */
+
     if(p->topo == -1) //Se topo for -1 = pilha vazia
         return 1;
     else
@@ -174,7 +173,7 @@ int pilhaVazia(Pilha *p) {
 
 /* Retorna 1 se a pilha estiver cheia, 0 caso contrário */
 int pilhaCheia(Pilha *p) {
-    /* TODO: implementar */
+
     if(p->topo == TAM_PILHA -1) // Se o topo for o mesmo valor do tamanho da pilha = cheia
         return 1;
     else
@@ -183,7 +182,6 @@ int pilhaCheia(Pilha *p) {
 
 /* Empilha cliente no histórico */
 void pilhaEmpilhar(Pilha *p, Cliente c) {
-    /* TODO: implementar */
     /* G08: se cheia, descartar o mais antigo antes de empilhar */
     if (pilhaCheia(p)){
         printf("Pilha cheia, removendo o mais antigo e inserindo");
@@ -199,8 +197,7 @@ void pilhaEmpilhar(Pilha *p, Cliente c) {
 
 /* Desempilha e retorna o topo */
 Cliente pilhaDesempilhar(Pilha *p) {
-    Cliente vazio = {0}; //Cria cliente vazio
-    /* TODO: implementar */
+    Cliente vazio = {0}; // Cria cliente vazio
     if(pilhaVazia(p)){
     return vazio;
     }
@@ -259,8 +256,39 @@ No* listaInserir(No *inicio, Cliente c) {
 
 /* Remove cliente da lista pelo número da senha */
 No* listaRemover(No *inicio, int senha) {
-    /* TODO: implementar */
+    if (inicio == NULL) {
+        printf("Lista vazia.\n");
+    }
+
+    Cliente vetor[TAM_FILA];
+    int n = 0;
+    listaParaVetor(inicio, vetor, &n);
+
+
     /* G10: usar busca binária antes de remover */
+    int indice = buscaBinaria(vetor, n, senha); // chamar buscaBinaria, ainda nao implementada
+
+    if (indice == -1) {
+        printf("Senha nao encontrada.\n");
+        return inicio;
+    }
+
+    /* Remove o nó na posição indice */
+    if (indice == 0) {
+        No *remover = inicio;
+        inicio = inicio->prox;
+        free(remover);
+        return inicio;
+    }
+
+    No *anterior = inicio;
+    for (int i = 0; i < indice - 1; i++) {
+        anterior = anterior->prox;
+    }
+
+    No *remover = anterior->prox;
+    anterior->prox = remover->prox;
+    free(remover);    
     return inicio;
 }
 
