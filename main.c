@@ -397,7 +397,7 @@ void ordenar(Cliente vet[], int n) {
      int trocas= 0;
      Cliente temp;
      for( int i =0;i < n -1; i++){
-         for(int já =0; j< n - 1; j++){
+         for(int j =0; j< n - 1; j++){
          
              if(vet[j].senha > vet[j + 1].senha){
                  temp = vet[j];
