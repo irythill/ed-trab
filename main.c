@@ -258,6 +258,7 @@ No* listaInserir(No *inicio, Cliente c) {
 No* listaRemover(No *inicio, int senha) {
     if (inicio == NULL) {
         printf("Lista vazia.\n");
+        return;
     }
 
     Cliente vetor[TAM_FILA];
@@ -269,7 +270,7 @@ No* listaRemover(No *inicio, int senha) {
     int indice = buscaBinaria(vetor, n, senha); // chamar buscaBinaria, ainda nao implementada
 
     if (indice == -1) {
-        printf("Senha nao encontrada.\n");
+        printf("Senha %03d nao encontrada.\n", senha);
         return inicio;
     }
 
@@ -294,7 +295,22 @@ No* listaRemover(No *inicio, int senha) {
 
 /* Exibe todos os clientes da lista */
 void listaExibir(No *inicio) {
-    /* TODO: implementar */
+    if (inicio == NULL) {
+        printf("Lista vazia.\n");
+        return;
+    }
+
+    printf("--- Clientes cadastrados ---\n");
+
+    No *atual = inicio;
+    while (atual != NULL) {
+        printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
+            atual->dado.senha,
+            atual->dado.nome,
+            atual->dado.cpf,
+            atual->dado.prioritario == 1 ? "Sim" : "Nao");
+        atual = atual->prox;
+    }
 }
 
 /* Libera toda a memória da lista */
