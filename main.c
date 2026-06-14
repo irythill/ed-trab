@@ -430,8 +430,8 @@ int main() {
                 printf("Prioritario? (1=sim, 0=nao) [Gestante (prioritario=1)]: ");
                 scanf("%d", &c.prioritario);
                 printf("char cpf[15]: ");
-                /* TODO: ler campo extra conforme tipo */
-
+                scanf(" %14s", c.cpf);
+                
                 filaInserir(&fila, c);
                 lista = listaInserir(lista, c);
                 printf("Cliente cadastrado. Senha: %03d\n", c.senha);
