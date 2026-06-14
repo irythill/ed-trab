@@ -348,7 +348,15 @@ No* listaApagar(No *inicio) {
 
 /* Busca sequencial por senha — percorre elemento a elemento */
 int buscaSequencial(Cliente vet[], int n, int senha) {
-    /* TODO: implementar */
+    int comparacoes=0;
+    for(int i=0; i < n; i++){
+    comparacoes++;
+    if (vet[i].senha== senha){
+    printf("%d comparacoes feitas\n", comparacoes);
+    return i;
+    }
+    }
+    printf("%d comparacoes feitas\n", comparacoes);
     /* G02/G09: contar e exibir o número de comparações */
     return -1; /* retorna índice ou -1 se não encontrado */
 }
@@ -357,8 +365,19 @@ int buscaSequencial(Cliente vet[], int n, int senha) {
 int buscaBinaria(Cliente vet[], int n, int senha) {
     int low = 0, high = n - 1;
     /* TODO: implementar */
+    while(low <=high){
+    int mid = low+ (high - low)/2;
+    if (vet[mid].senha == senha){
+        return mid; //Encontrado
+        }
+        if(senha < vet[mid].senha){
+        high = mid-1; //procura na esquerda
+        }else{
+        low= mid+1; //procura na direita
+        }
+    }
     /* G04/G10: exibir número de comparações realizadas */
-    return -1; /* retorna índice ou -1 se não encontrado */
+    return -1; //Não encontrado
 }
 
 
@@ -375,6 +394,21 @@ void ordenar(Cliente vet[], int n) {
      * G10: implementar dois critérios (por senha e por nome)
      *      — use um parâmetro int criterio (0=senha, 1=nome)
      */
+     int trocas= 0;
+     Cliente temp;
+     for( int i =0;i < n -1; i++){
+         for(int já =0; j< n - 1; j++){
+         
+             if(vet[j].senha > vet[j + 1].senha){
+                 temp = vet[j];
+                 vet[j]= vet[j +1];
+                 vet[j +1]= temp;
+                 
+                 trocas++;
+             }
+         }
+     }
+     printf("%d trocas realizadas", trocas);
 }
 
 
