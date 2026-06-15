@@ -498,8 +498,22 @@ int main() {
                 int senha;
                 printf("Numero da senha: ");
                 scanf("%d", &senha);
-                /* TODO: usar Sequencial */
-                /* Converter lista para vetor auxiliar antes da busca */
+                
+                Cliente vetor[TAM_FILA];
+                int n;
+                
+                listaParaVetor(lista, vetor, &n);
+                int indice = buscaSequencial(vetor,n,senha);
+                
+                if(indice !=-1){
+                printf("Cliente encontrado:\n");
+                printf("Senha:%d\n", vetor[indice].senha);
+                printf("Nome:%s\n", vetor[indice].nome);
+                printf("CPF:%s\n", vetor[indice].cpf);
+                printf("Prioritario:%s\n", vetor[indice].prioritario ? "Sim":"Nao");
+                }else{
+                printf("Cliente nao encontrado");
+                }
                 break;
             }
             case 4: filaExibir(&fila);      break;
