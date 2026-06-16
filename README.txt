@@ -22,6 +22,7 @@ Luiz Henrique de Moraes Chagas:
 - busca sequencial
 - busca binaria
 - ordenação(bubble sort)
+- Buscar Cliente
 
 Vinicius Dos Santos Cardoso:
 - pilhaInicializar
