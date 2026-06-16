@@ -210,7 +210,7 @@ Cliente pilhaDesempilhar(Pilha *p) {
 /* Exibe o histórico de atendimentos */
 void pilhaExibir(Pilha *p) {
     for(int i = p->topo; i >= 0; i--) { //Percorre clientes
-        printf("Senha: %03d , Nome: %s", p->itens[i].senha, p->itens[i].nome); //Exibe itens de clientes (senha e nome)
+        printf("Senha: %03d , Nome: %s\n", p->itens[i].senha, p->itens[i].nome); //Exibe itens de clientes (senha e nome)
     }
 }
 

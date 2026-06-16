@@ -24,6 +24,12 @@ Luiz Henrique de Moraes Chagas:
 - ordenação(bubble sort)
 
 Vinicius Dos Santos Cardoso:
+- pilhaInicializar
+- pilhaVazia
+- pilhaCheia
+- pilhaEmpilhar
+- pilhaDesempilhar
+- pilhaExibir
 
 2. Qual foi a maior dificuldade? Como resolveram?
 3. Por que o algoritmo de busca sequencial e o algoritmo Bubble Sort para ordenação é adequado (ou não) para o contexto
