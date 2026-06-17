@@ -64,6 +64,42 @@ typedef struct {
 
 
 /* ============================================================
+ * PROTÓTIPOS DAS FUNÇÕES
+ * ============================================================ */
+
+/* Fila */
+void filaInicializar(Fila *f);
+int filaVazia(Fila *f);
+int filaCheia(Fila *f);
+void filaInserir(Fila *f, Cliente c);
+Cliente filaRemover(Fila *f);
+void filaExibir(Fila *f);
+
+/* Pilha */
+void pilhaInicializar(Pilha *p);
+int pilhaVazia(Pilha *p);
+int pilhaCheia(Pilha *p);
+void pilhaEmpilhar(Pilha *p, Cliente c);
+Cliente pilhaDesempilhar(Pilha *p);
+void pilhaExibir(Pilha *p);
+
+/* Lista encadeada */
+No* listaInserir(No *inicio, Cliente c);
+void listaParaVetor(No *inicio, Cliente vet[], int *n);
+No* listaRemover(No *inicio, int senha);
+void listaExibir(No *inicio);
+No* listaApagar(No *inicio);
+
+/* Busca e ordenação */
+int buscaSequencial(Cliente vet[], int n, int senha);
+int buscaBinaria(Cliente vet[], int n, int senha);
+void ordenar(Cliente vet[], int n);
+
+/* Relatório */
+void gerarRelatorio(Cliente historico[], int n);
+
+
+/* ============================================================
  * FUNÇÕES DA FILA
  * ============================================================ */
 
@@ -286,7 +322,7 @@ No* listaRemover(No *inicio, int senha) {
 
 
     /* G10: usar busca binária antes de remover */
-    int indice = buscaBinaria(vetor, n, senha); // chamar buscaBinaria, ainda nao implementada
+    int indice = buscaBinaria(vetor, n, senha);
 
     if (indice == -1) {
         printf("Senha %03d nao encontrada.\n", senha);
