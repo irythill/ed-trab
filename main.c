@@ -288,31 +288,10 @@ No* listaInserir(No *inicio, Cliente c) {
         return inicio;
     }
     noh->dado = c;
-    noh->prox = NULL;
-
-    /* Lista vazia */
-    if (inicio == NULL) {
-        return noh;
-    }
-
-    /* Insere no início */
-    if (c.senha < inicio->dado.senha) {
-        noh->prox = inicio;
-        return noh;
-    }
-
-    /* Insere no meio ou no fim, não necessário pois a lista ordena por senha crescente automaticamente */
-    No *anterior = inicio;
-    No *atual = inicio->prox;
-
-    while (atual != NULL && atual->dado.senha < c.senha) {
-        anterior = atual;
-        atual = atual->prox;
-    }
-
-    anterior->prox = noh;
-    noh->prox = atual;
-    return inicio;
+    /* TODO: implementar inserção */
+    /* G01: manter lista ordenada por senha na inserção */
+    noh->prox = inicio;
+    return noh;
 }
 
 /* Função auxiliar para copiar a lista para um vetor */
@@ -329,26 +308,14 @@ void listaParaVetor(No *inicio, Cliente vet[], int *n) {
 
 /* Remove cliente da lista pelo número da senha */
 No* listaRemover(No *inicio, int senha) {
+    /* TODO: implementar */
+    /* G10: usar busca binária antes de remover */
     if (inicio == NULL) {
         printf("Lista vazia.\n");
         return NULL;
     }
 
-    Cliente vetor[TAM_FILA];
-    int n = 0;
-    listaParaVetor(inicio, vetor, &n);
-
-
-    /* G10: usar busca binária antes de remover */
-    int indice = buscaBinaria(vetor, n, senha);
-
-    if (indice == -1) {
-        printf("Senha %03d nao encontrada.\n", senha);
-        return inicio;
-    }
-
-    /* Remove o nó na posição indice */
-    if (indice == 0) {
+    if (inicio->dado.senha == senha) {
         No *remover = inicio;
         inicio = inicio->prox;
         free(remover);
@@ -356,13 +323,17 @@ No* listaRemover(No *inicio, int senha) {
     }
 
     No *anterior = inicio;
-    for (int i = 0; i < indice - 1; i++) {
+    while (anterior->prox != NULL) {
+        if (anterior->prox->dado.senha == senha) {
+            No *remover = anterior->prox;
+            anterior->prox = remover->prox;
+            free(remover);
+            return inicio;
+        }
         anterior = anterior->prox;
     }
 
-    No *remover = anterior->prox;
-    anterior->prox = remover->prox;
-    free(remover);
+    printf("Senha %03d nao encontrada.\n", senha);
     return inicio;
 }
 
@@ -473,8 +444,12 @@ void ordenar(Cliente vet[], int n) {
 
 
 /* ============================================================
- * RELATÓRIO
+ * REQUISITO ÚNICO DO GRUPO G09
  * ============================================================ */
+
+/*
+ * Relatório com contagem de trocas: ao ordenar, exibir quantas trocas o algoritmo realizou.
+ */
 
 /* Gera relatório de atendimentos ordenado */
 void gerarRelatorio(Cliente historico[], int n) {
@@ -502,17 +477,6 @@ void gerarRelatorio(Cliente historico[], int n) {
                aux[i].prioritario == 1 ? "Sim" : "Nao");
     }
 }
-
-
-/* ============================================================
- * REQUISITO ÚNICO DO GRUPO G09
- * ============================================================ */
-
-/*
- * Relatório com contagem de trocas: ao ordenar, exibir quantas trocas o algoritmo realizou.
- * TODO: implementar a função (ou funções) necessárias aqui.
- */
-
 
 /* ============================================================
  * FUNÇÃO PRINCIPAL
