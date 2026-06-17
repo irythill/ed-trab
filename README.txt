@@ -36,10 +36,12 @@ Vinicius Dos Santos Cardoso:
 
 3. Por que o algoritmo de busca sequencial e o algoritmo Bubble Sort para ordenação é adequado (ou não) para o contexto
 escolhido?
+São considerados adequados por causa do sistema ter uma quantidade pequena de clientes e registros no histórico.
 
 4. Qual é o valor de inicio e final da fila após inserir 10 elementos e remover 5? Mostre o estado do vetor.
 
 5. O algoritmo de ordenação do grupo é estável? Isso importa no contexto escolhido? Justifique.
+O algoritmo é estável mas não influencia o funcionamento do sistema, porque cada cliente vai ter uma senha única. Como não vai ter senha repetida, não é necessário manter a ordem entre elementos iguais.
 
 6. Demonstre o estado da lista encadeada após as três primeiras inserções com dados reais do contexto:
 Cada cadastro (opção 1) insere o cliente na cabeça da lista com listaInserir().
