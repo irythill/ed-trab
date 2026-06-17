@@ -301,7 +301,7 @@ No* listaInserir(No *inicio, Cliente c) {
         return noh;
     }
 
-    /* Insere no meio ou no fim */
+    /* Insere no meio ou no fim, não necessário pois a lista ordena por senha crescente automaticamente */
     No *anterior = inicio;
     No *atual = inicio->prox;
 
