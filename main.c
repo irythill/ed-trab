@@ -209,6 +209,13 @@ Cliente pilhaDesempilhar(Pilha *p) {
 
 /* Exibe o histórico de atendimentos */
 void pilhaExibir(Pilha *p) {
+
+    // Verifica se a pilha não está vazia
+    if (pilhaVazia(p)) {
+        printf("Historico vazio.\n");
+        return;
+    }
+
     for(int i = p->topo; i >= 0; i--) { //Percorre clientes
         printf("Senha: %03d , Nome: %s\n", p->itens[i].senha, p->itens[i].nome); //Exibe itens de clientes (senha e nome)
     }
@@ -301,7 +308,7 @@ No* listaRemover(No *inicio, int senha) {
 
     No *remover = anterior->prox;
     anterior->prox = remover->prox;
-    free(remover);    
+    free(remover);
     return inicio;
 }
 
@@ -376,7 +383,6 @@ int buscaBinaria(Cliente vet[], int n, int senha) {
         low= mid+1; //procura na direita
         }
     }
-    /* G04/G10: exibir número de comparações realizadas */
     return -1; //Não encontrado
 }
 
@@ -398,17 +404,17 @@ void ordenar(Cliente vet[], int n) {
      Cliente temp;
      for( int i =0;i < n -1; i++){
          for(int j =0; j< n - 1; j++){
-         
+
              if(vet[j].senha > vet[j + 1].senha){
                  temp = vet[j];
                  vet[j]= vet[j +1];
                  vet[j +1]= temp;
-                 
+
                  trocas++;
              }
          }
      }
-     printf("%d trocas realizadas", trocas);
+     printf("%d trocas realizadas\n", trocas);
 }
 
 
@@ -418,13 +424,29 @@ void ordenar(Cliente vet[], int n) {
 
 /* Gera relatório de atendimentos ordenado */
 void gerarRelatorio(Cliente historico[], int n) {
-    /* TODO:
-     * 1. Copiar histórico para vetor auxiliar
-     * 2. Ordenar com Bubble Sort
-     * 3. Exibir
-     * G04: filtrar por intervalo de senhas (usa busca binária)
-     * G10: perguntar critério ao usuário antes de ordenar
-     */
+    // Valida se o topo do histórico é 0, se sim, significa estar vazio
+    if (n == 0) {
+        printf("Nao ha atendimentos no historico.\n");
+        return;
+    }
+    // Copia os clientes da pilha para um vetor auxiliar
+    Cliente aux[TAM_PILHA];
+
+    for (int i = 0; i < n; i++) {
+        aux[i] = historico[i];
+    }
+
+    // Ordena o vetor auxiliar
+    ordenar(aux, n);
+
+    // Exibir o vetor auxiliar ordenado
+    for (int i = 0; i < n; i++) {
+        printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
+               aux[i].senha,
+               aux[i].nome,
+               aux[i].cpf,
+               aux[i].prioritario == 1 ? "Sim" : "Nao");
+    }
 }
 
 
@@ -477,7 +499,7 @@ int main() {
                 scanf("%d", &c.prioritario);
                 printf("char cpf[15]: ");
                 scanf(" %14s", c.cpf);
-                
+
                 filaInserir(&fila, c);
                 lista = listaInserir(lista, c);
                 printf("Cliente cadastrado. Senha: %03d\n", c.senha);
@@ -498,13 +520,13 @@ int main() {
                 int senha;
                 printf("Numero da senha: ");
                 scanf("%d", &senha);
-                
+
                 Cliente vetor[TAM_FILA];
                 int n;
-                
+
                 listaParaVetor(lista, vetor, &n);
                 int indice = buscaSequencial(vetor,n,senha);
-                
+
                 if(indice !=-1){
                 printf("Cliente encontrado:\n");
                 printf("Senha:%d\n", vetor[indice].senha);
@@ -519,10 +541,7 @@ int main() {
             case 4: filaExibir(&fila);      break;
             case 5: pilhaExibir(&historico); break;
             case 6: listaExibir(lista);      break;
-            case 7: {
-                /* TODO: copiar histórico para vetor e chamar gerarRelatorio */
-                break;
-            }
+            case 7: gerarRelatorio(historico.itens, historico.topo + 1); break;
             case 0: printf("Encerrando...\n"); break;
             default: printf("Opcao invalida.\n");
         }
