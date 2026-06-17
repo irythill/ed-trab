@@ -40,6 +40,12 @@ São considerados adequados por causa do sistema ter uma quantidade pequena de c
 
 4. Qual é o valor de inicio e final da fila após inserir 10 elementos e remover 5? Mostre o estado do vetor.
 
+4)  Início da fila = Senha 006
+    Fim da fila    = Senha 010
+
+4)  Estado do vetor após a remoção:
+    Senha : 006  007  008  009  010
+
 5. O algoritmo de ordenação do grupo é estável? Isso importa no contexto escolhido? Justifique.
 O algoritmo é estável mas não influencia o funcionamento do sistema, porque cada cliente vai ter uma senha única. Como não vai ter senha repetida, não é necessário manter a ordem entre elementos iguais.
 
