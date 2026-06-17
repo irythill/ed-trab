@@ -42,17 +42,18 @@ escolhido?
 5. O algoritmo de ordenação do grupo é estável? Isso importa no contexto escolhido? Justifique.
 
 6. Demonstre o estado da lista encadeada após as três primeiras inserções com dados reais do contexto:
-Cada cadastro (opção 1) insere o cliente na lista encadeada com listaInserir(), que mantém a ordem crescente de senha.
+Cada cadastro (opção 1) insere o cliente na cabeça da lista com listaInserir().
+
 Cadastro 1:
     Cliente: Maria | Senha: 001 | Prioritario: Nao | CPF: 689.804.440-01
     Estado da lista: lista → [001 Maria] → NULL
 
 Cadastro 2:
     Cliente: Joao  | Senha: 002 | Prioritario: Sim (gestante) | CPF: 495.575.710-39
-    Estado da lista: lista → [001 Maria] → [002 Joao] → NULL
-    
+    Estado da lista: lista → [002 Joao] → [001 Maria] → NULL
+
 Cadastro 3:
     Cliente: Ana   | Senha: 003 | Prioritario: Nao | CPF: 581.754.040-19
-    Estado da lista: lista → [001 Maria] → [002 Joao] → [003 Ana] → NULL
+    Estado da lista: lista → [003 Ana] → [002 Joao] → [001 Maria] → NULL
 
-A lista permanece ordenada por senha crescente porque listaInserir() insere cada novo nó na posição correta (vazia, início, meio ou fim), e não apenas na cabeça da lista.
+A lista exibe os cadastros do mais recente para o mais antigo (inserção na cabeça).
