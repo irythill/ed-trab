@@ -15,13 +15,31 @@
  * Requisito único: Relatório com contagem de trocas: ao ordenar, exibir quantas trocas o algoritmo realizou.
  * ============================================================
  *
- * TRACE MANUAL — (preencher aqui antes da entrega)
- * Algoritmo: Bubble Sort
- * Dados iniciais: [ preencher com senhas reais do contexto ]
+ * TRACE MANUAL — Bubble Sort (ordenar por senha crescente)
+ * Contexto: histórico de atendimentos da farmácia (opção 7)
  *
- * Passagem 1: ...
- * Passagem 2: ...
- * Resultado final: ...
+ * Cadastros realizados:
+ *   001 Maria  (normal)   | CPF 689.804.440-01
+ *   002 Joao   (gestante) | CPF 495.575.710-39
+ *   003 Ana    (normal)   | CPF 581.754.040-19
+ *   004 Carla  (gestante) | CPF 658.347.180-94
+ *   005 Pedro  (normal)   | CPF 107.045.120-76
+ *
+ * Atendimentos (opção 2) — prioridade de gestante altera a ordem:
+ *   1º Joao (002) → 2º Carla (004) → 3º Maria (001)
+ *
+ * Dados iniciais: [002 Joao, 004 Carla, 001 Maria]
+ *
+ * Passagem 1 (i=0):
+ *   j=0: 002 > 004? Nao  → [002, 004, 001]
+ *   j=1: 004 > 001? Sim  → [002, 001, 004]
+ *
+ * Passagem 2 (i=1):
+ *   j=0: 002 > 001? Sim  → [001, 002, 004]
+ *   j=1: 002 > 004? Nao  → [001, 002, 004]
+ *
+ * Resultado final: [001 Maria, 002 Joao, 004 Carla]
+ * Total de trocas: 2
  * ============================================================
  */
 
