@@ -1,510 +1,52 @@
 /*
- * ============================================================
- * TRABALHO PRÁTICO — Estrutura de Dados
- * Grupo: G09 | Contexto: Farmácia
- * ============================================================
- * Parâmetros do grupo:
- *   Capacidade máxima da fila  : 11
- *   Capacidade do histórico    : 3
- *   Algoritmo de ordenação     : Bubble Sort
- *   Algoritmo de busca         : Sequencial
- *   Tipo de prioridade         : Gestante (prioritario=1)
- *   Campo extra no cadastro    : char cpf[15]
- *   Questão 4 do Diário        : inserir 10, remover 5
- *
- * Requisito único: Relatório com contagem de trocas: ao ordenar, exibir quantas trocas o algoritmo realizou.
- * ============================================================
- *
- * TRACE MANUAL — Bubble Sort (ordenar por senha crescente)
- * Contexto: histórico de atendimentos da farmácia (opção 7)
- *
- * Cadastros realizados:
- *   001 Maria  (normal)   | CPF 689.804.440-01
- *   002 Joao   (gestante) | CPF 495.575.710-39
- *   003 Ana    (normal)   | CPF 581.754.040-19
- *   004 Carla  (gestante) | CPF 658.347.180-94
- *   005 Pedro  (normal)   | CPF 107.045.120-76
- *
- * Atendimentos (opção 2) — prioridade de gestante altera a ordem:
- *   1º Joao (002) → 2º Carla (004) → 3º Maria (001)
- *
- * Dados iniciais: [002 Joao, 004 Carla, 001 Maria]
- *
- * Passagem 1 (i=0):
- *   j=0: 002 > 004? Nao  → [002, 004, 001]
- *   j=1: 004 > 001? Sim  → [002, 001, 004]
- *
- * Passagem 2 (i=1):
- *   j=0: 002 > 001? Sim  → [001, 002, 004]
- *   j=1: 002 > 004? Nao  → [001, 002, 004]
- *
- * Resultado final: [001 Maria, 002 Joao, 004 Carla]
- * Total de trocas: 2
- * ============================================================
+ * Trabalho Prático — Estrutura de Dados
+ * Grupo G09 | Farmácia
  */
+
+#include "sistema.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define TAM_FILA 11
-#define TAM_PILHA 3
 
-/* ============================================================
- * DEFINIÇÃO DAS STRUCTS
- * ============================================================ */
-
-/* Struct do cliente — adaptar conforme parâmetros do grupo */
-typedef struct cliente {
-    int senha;
-    char nome[50];
-    int prioritario;   /* 0 = normal, 1 = prioritário (Gestante (prioritario=1)) */
-    char cpf[15];        /* campo extra do grupo */
-} Cliente;
-
-/* Nó da lista encadeada — mantém nomes 'dado' e 'prox' das aulas */
-typedef struct no {
-    Cliente dado;
-    struct no *prox;
-} No;
-
-/* Fila implementada com vetor */
-typedef struct {
-    Cliente itens[TAM_FILA];
-    int inicio;
-    int quantidade;
-} Fila;
-
-/* Pilha implementada com vetor */
-typedef struct {
-    Cliente itens[TAM_PILHA];
-    int topo;
-} Pilha;
-
-
-/* ============================================================
- * PROTÓTIPOS DAS FUNÇÕES
- * ============================================================ */
-
-/* Fila */
-void filaInicializar(Fila *f);
-int filaVazia(Fila *f);
-int filaCheia(Fila *f);
-void filaInserir(Fila *f, Cliente c);
-Cliente filaRemover(Fila *f);
-void filaExibir(Fila *f);
-
-/* Pilha */
-void pilhaInicializar(Pilha *p);
-int pilhaVazia(Pilha *p);
-int pilhaCheia(Pilha *p);
-void pilhaEmpilhar(Pilha *p, Cliente c);
-Cliente pilhaDesempilhar(Pilha *p);
-void pilhaExibir(Pilha *p);
-
-/* Lista encadeada */
-No* listaInserir(No *inicio, Cliente c);
-void listaParaVetor(No *inicio, Cliente vet[], int *n);
-No* listaRemover(No *inicio, int senha);
-void listaExibir(No *inicio);
-No* listaApagar(No *inicio);
-
-/* Busca e ordenação */
-int buscaSequencial(Cliente vet[], int n, int senha);
-int buscaBinaria(Cliente vet[], int n, int senha);
-void ordenar(Cliente vet[], int n);
-
-/* Relatório */
-void gerarRelatorio(Cliente historico[], int n);
-
-
-/* ============================================================
- * FUNÇÕES DA FILA
- * ============================================================ */
-
-/* Inicializa a fila */
-void filaInicializar(Fila *f) {
-    f->inicio = 0;
-    f->quantidade  = 0;
+static void exibirBanner(void) {
+    printf("\n");
+    printf("        +-------------------------------------+\n");
+    printf("        |      Rx  FARMACIA G09  Rx           |\n");
+    printf("        |   Sistema de Atendimento ao         |\n");
+    printf("        |            Cliente                  |\n");
+    printf("        +-------------------------------------+\n");
+    printf("\n");
 }
 
-/* Retorna 1 se a fila estiver vazia, 0 caso contrário */
-int filaVazia(Fila *f) {
-    if (f->quantidade == 0)
-        return 1;
-    return 0;
+static void exibirMenu(void) {
+    printf("\n");
+    printf("+======================================+\n");
+    printf("|            MENU PRINCIPAL            |\n");
+    printf("+======================================+\n");
+    printf("|  1. Cadastrar novo cliente           |\n");
+    printf("|  2. Chamar proximo cliente           |\n");
+    printf("|  3. Buscar cliente                   |\n");
+    printf("|  4. Exibir fila atual                |\n");
+    printf("|  5. Exibir historico (pilha)         |\n");
+    printf("|  6. Exibir lista de clientes         |\n");
+    printf("|  7. Gerar relatorio ordenado         |\n");
+    printf("|  0. Sair                             |\n");
+    printf("+======================================+\n");
+    printf("Opcao: ");
 }
 
-/* Retorna 1 se a fila estiver cheia, 0 caso contrário */
-int filaCheia(Fila *f) {
-    if (f->quantidade == TAM_FILA)
-        return 1;
-    return 0;
-}
-
-/* Insere cliente na fila */
-void filaInserir(Fila *f, Cliente c) {
-    if (filaCheia(f))
-            return;
-    int fim = (f->inicio + f->quantidade) % TAM_FILA;
-    f->itens[fim] = c;
-    f->quantidade++;
-}
-
-/* Remove e retorna o primeiro cliente da fila */
-Cliente filaRemover(Fila *f) {
-    Cliente vazio = {0};
-
-    if (filaVazia(f)) {
-        printf("Fila vazia.\n");
-        return vazio;
-    }
-
-    /* Encontra a posicao do primeiro prioritario */
-    int posicaoRemover = 0;
-    for (int i = 0; i < f->quantidade; i++) {
-        int indice = (f->inicio + i) % TAM_FILA;
-        if (f->itens[indice].prioritario == 1) {
-            posicaoRemover = i;
-            break;
-        }
-    }
-
-    int indiceRemover = (f->inicio + posicaoRemover) % TAM_FILA;
-    Cliente removido = f->itens[indiceRemover];
-
-    /* Remove o primeiro */
-    if (posicaoRemover == 0) {
-        f->inicio = (f->inicio + 1) % TAM_FILA;
-        f->quantidade--;
-        return removido;
-    }
-
-    /* Remove do meio da fila */
-    for (int i = posicaoRemover; i < f->quantidade - 1; i++) {
-        int destino = (f->inicio + i) % TAM_FILA;
-        int origem = (f->inicio + i + 1) % TAM_FILA;
-        f->itens[destino] = f->itens[origem];
-    }
-    f->quantidade--;
-
-    return removido;
-}
-
-/* Exibe o estado atual da fila */
-void filaExibir(Fila *f) {
-    if (filaVazia(f)){
-        printf("A fila esta vazia.");
-        return;
-    }
-
-    for (int i = 0; i < f -> quantidade; i++) {
-
-        int posicao = (f->inicio + i) % TAM_FILA;
-
-        printf("senha: %03d, nome: %s\n",
-            f->itens[posicao].senha,
-            f->itens[posicao].nome);
-    }
-}
-
-/* ============================================================
- * FUNÇÕES DA PILHA (HISTÓRICO)
- * ============================================================ */
-
-/* Inicializa a pilha */
-void pilhaInicializar(Pilha *p) {
-    p->topo = -1; //Inicializa pilha no vetor -1
-}
-
-/* Retorna 1 se a pilha estiver vazia, 0 caso contrário */
-int pilhaVazia(Pilha *p) {
-
-    if(p->topo == -1) //Se topo for -1 = pilha vazia
-        return 1;
-    else
-        return 0;
-}
-
-/* Retorna 1 se a pilha estiver cheia, 0 caso contrário */
-int pilhaCheia(Pilha *p) {
-
-    if(p->topo == TAM_PILHA -1) // Se o topo for o mesmo valor do tamanho da pilha = cheia
-        return 1;
-    else
-        return 0;
-}
-
-/* Empilha cliente no histórico */
-void pilhaEmpilhar(Pilha *p, Cliente c) {
-    /* G08: se cheia, descartar o mais antigo antes de empilhar */
-    if (pilhaCheia(p)){
-        printf("Pilha cheia, removendo o mais antigo e inserindo");
-        for (int i = 0; i < TAM_PILHA - 1; i++) {
-            p->itens[i] = p->itens[i+1]; //Move os elementos para esquerda
-        }
-        p->topo--; //Ajusta topo
-    };
-
-    p->topo++; //Reserva para o proximo cliente
-    p->itens[p->topo] = c; // Insere novo cliente
-}
-
-/* Desempilha e retorna o topo */
-Cliente pilhaDesempilhar(Pilha *p) {
-    Cliente vazio = {0}; // Cria cliente vazio
-    if(pilhaVazia(p)){
-    return vazio;
-    }
-
-    Cliente removido = p->itens[p->topo]; //Zera as informações do indice(Itens)
-    p->topo--; // Ajeita topo, elimina Cliente
-    return removido;
-}
-
-/* Exibe o histórico de atendimentos */
-void pilhaExibir(Pilha *p) {
-
-    // Verifica se a pilha não está vazia
-    if (pilhaVazia(p)) {
-        printf("Historico vazio.\n");
-        return;
-    }
-
-    for(int i = p->topo; i >= 0; i--) { //Percorre clientes
-        printf("Senha: %03d , Nome: %s\n", p->itens[i].senha, p->itens[i].nome); //Exibe itens de clientes (senha e nome)
-    }
-}
-
-
-/* ============================================================
- * FUNÇÕES DA LISTA ENCADEADA
- * ============================================================ */
-
-/* Insere cliente na lista */
-No* listaInserir(No *inicio, Cliente c) {
-    No *noh = (No*)malloc(sizeof(No));
-    if(noh == NULL) {
-        printf("Erro ao alocar memoria. \n");
-        return inicio;
-    }
-    noh->dado = c;
-    /* TODO: implementar inserção */
-    /* G01: manter lista ordenada por senha na inserção */
-    noh->prox = inicio;
-    return noh;
-}
-
-/* Função auxiliar para copiar a lista para um vetor */
-void listaParaVetor(No *inicio, Cliente vet[], int *n) {
-    *n = 0;
-    No *atual = inicio;
-    while (atual != NULL) {
-        vet[*n] = atual->dado;
-        (*n)++;
-        atual = atual->prox;
-    }
-}
-
-
-/* Remove cliente da lista pelo número da senha */
-No* listaRemover(No *inicio, int senha) {
-    /* TODO: implementar */
-    /* G10: usar busca binária antes de remover */
-    if (inicio == NULL) {
-        printf("Lista vazia.\n");
-        return NULL;
-    }
-
-    if (inicio->dado.senha == senha) {
-        No *remover = inicio;
-        inicio = inicio->prox;
-        free(remover);
-        return inicio;
-    }
-
-    No *anterior = inicio;
-    while (anterior->prox != NULL) {
-        if (anterior->prox->dado.senha == senha) {
-            No *remover = anterior->prox;
-            anterior->prox = remover->prox;
-            free(remover);
-            return inicio;
-        }
-        anterior = anterior->prox;
-    }
-
-    printf("Senha %03d nao encontrada.\n", senha);
-    return inicio;
-}
-
-/* Exibe todos os clientes da lista */
-void listaExibir(No *inicio) {
-    if (inicio == NULL) {
-        printf("Lista vazia.\n");
-        return;
-    }
-
-    printf("--- Clientes cadastrados ---\n");
-
-    No *atual = inicio;
-    while (atual != NULL) {
-        printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
-            atual->dado.senha,
-            atual->dado.nome,
-            atual->dado.cpf,
-            atual->dado.prioritario == 1 ? "Sim" : "Nao");
-        atual = atual->prox;
-    }
-}
-
-/* Libera toda a memória da lista */
-No* listaApagar(No *inicio) {
-    No *atual = inicio;
-    while (atual != NULL) {
-        No *t = atual->prox;
-        free(atual);
-        atual = t;
-    }
-    return NULL;
-}
-
-
-/* ============================================================
- * ALGORITMO DE BUSCA — Sequencial
- * ============================================================ */
-
-/*
- * IMPORTANTE: a busca binária exige que o vetor esteja ordenado.
- * Antes de chamar buscaBinaria(), ordenar o vetor com Bubble Sort.
- */
-
-/* Busca sequencial por senha — percorre elemento a elemento */
-int buscaSequencial(Cliente vet[], int n, int senha) {
-    int comparacoes=0;
-    for(int i=0; i < n; i++){
-    comparacoes++;
-    if (vet[i].senha== senha){
-    printf("%d comparacoes feitas\n", comparacoes);
-    return i;
-    }
-    }
-    printf("%d comparacoes feitas\n", comparacoes);
-    /* G02/G09: contar e exibir o número de comparações */
-    return -1; /* retorna índice ou -1 se não encontrado */
-}
-
-/* Busca binária por senha — exige vetor ordenado */
-int buscaBinaria(Cliente vet[], int n, int senha) {
-    int low = 0, high = n - 1;
-    /* TODO: implementar */
-    while(low <=high){
-    int mid = low+ (high - low)/2;
-    if (vet[mid].senha == senha){
-        return mid; //Encontrado
-        }
-        if(senha < vet[mid].senha){
-        high = mid-1; //procura na esquerda
-        }else{
-        low= mid+1; //procura na direita
-        }
-    }
-    return -1; //Não encontrado
-}
-
-
-/* ============================================================
- * ALGORITMO DE ORDENAÇÃO — Bubble Sort
- * ============================================================ */
-
-/* Ordena vetor de clientes por número de senha (crescente) */
-void ordenar(Cliente vet[], int n) {
-    /*
-     * TODO: implementar Bubble Sort
-     *
-     * G09: contar e retornar (ou exibir) o número de trocas
-     * G10: implementar dois critérios (por senha e por nome)
-     *      — use um parâmetro int criterio (0=senha, 1=nome)
-     */
-     int trocas= 0;
-     Cliente temp;
-     for( int i =0;i < n -1; i++){
-         for(int j =0; j< n - 1; j++){
-
-             if(vet[j].senha > vet[j + 1].senha){
-                 temp = vet[j];
-                 vet[j]= vet[j +1];
-                 vet[j +1]= temp;
-
-                 trocas++;
-             }
-         }
-     }
-     printf("%d trocas realizadas\n", trocas);
-}
-
-
-/* ============================================================
- * REQUISITO ÚNICO DO GRUPO G09
- * ============================================================ */
-
-/*
- * Relatório com contagem de trocas: ao ordenar, exibir quantas trocas o algoritmo realizou.
- */
-
-/* Gera relatório de atendimentos ordenado */
-void gerarRelatorio(Cliente historico[], int n) {
-    // Valida se o topo do histórico é 0, se sim, significa estar vazio
-    if (n == 0) {
-        printf("Nao ha atendimentos no historico.\n");
-        return;
-    }
-    // Copia os clientes da pilha para um vetor auxiliar
-    Cliente aux[TAM_PILHA];
-
-    for (int i = 0; i < n; i++) {
-        aux[i] = historico[i];
-    }
-
-    // Ordena o vetor auxiliar
-    ordenar(aux, n);
-
-    // Exibir o vetor auxiliar ordenado
-    for (int i = 0; i < n; i++) {
-        printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
-               aux[i].senha,
-               aux[i].nome,
-               aux[i].cpf,
-               aux[i].prioritario == 1 ? "Sim" : "Nao");
-    }
-}
-
-/* ============================================================
- * FUNÇÃO PRINCIPAL
- * ============================================================ */
-
-int main() {
-    Fila   fila;
-    Pilha  historico;
-    No    *lista   = NULL;
-    int    opcao   = 0;
-    int    proxSenha = 1;
+int main(void) {
+    Fila fila;
+    Pilha historico;
+    No *lista = NULL;
+    int opcao = 0;
+    int proxSenha = 1;
 
     filaInicializar(&fila);
     pilhaInicializar(&historico);
-
-    printf("=== Sistema de Atendimento — Farmácia ===\n\n");
+    exibirBanner();
 
     do {
-        printf("\n--- MENU ---\n");
-        printf("1. Cadastrar novo cliente\n");
-        printf("2. Chamar proximo cliente\n");
-        printf("3. Buscar cliente\n");
-        printf("4. Exibir fila atual\n");
-        printf("5. Exibir historico (pilha)\n");
-        printf("6. Exibir lista de clientes\n");
-        printf("7. Gerar relatorio ordenado\n");
-        printf("0. Sair\n");
-        printf("Opcao: ");
+        exibirMenu();
         scanf("%d", &opcao);
 
         switch (opcao) {
@@ -513,9 +55,9 @@ int main() {
                 c.senha = proxSenha++;
                 printf("Nome: ");
                 scanf(" %49s", c.nome);
-                printf("Prioritario? (1=sim, 0=nao) [Gestante (prioritario=1)]: ");
+                printf("Prioritario? (1=sim, 0=nao) [Gestante]: ");
                 scanf("%d", &c.prioritario);
-                printf("char cpf[15]: ");
+                printf("CPF: ");
                 scanf(" %14s", c.cpf);
 
                 filaInserir(&fila, c);
@@ -541,29 +83,39 @@ int main() {
 
                 Cliente vetor[TAM_FILA];
                 int n;
-
                 listaParaVetor(lista, vetor, &n);
-                int indice = buscaSequencial(vetor,n,senha);
+                int indice = buscaSequencial(vetor, n, senha);
 
-                if(indice !=-1){
-                printf("Cliente encontrado:\n");
-                printf("Senha:%d\n", vetor[indice].senha);
-                printf("Nome:%s\n", vetor[indice].nome);
-                printf("CPF:%s\n", vetor[indice].cpf);
-                printf("Prioritario:%s\n", vetor[indice].prioritario ? "Sim":"Nao");
-                }else{
-                printf("Cliente nao encontrado");
+                if (indice != -1) {
+                    printf("--- Cliente encontrado ---\n");
+                    printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
+                           vetor[indice].senha,
+                           vetor[indice].nome,
+                           vetor[indice].cpf,
+                           vetor[indice].prioritario ? "Sim" : "Nao");
+                } else {
+                    printf("Cliente nao encontrado.\n");
                 }
                 break;
             }
-            case 4: filaExibir(&fila);      break;
-            case 5: pilhaExibir(&historico); break;
-            case 6: listaExibir(lista);      break;
-            case 7: gerarRelatorio(historico.itens, historico.topo + 1); break;
-            case 0: printf("Encerrando...\n"); break;
-            default: printf("Opcao invalida.\n");
+            case 4:
+                filaExibir(&fila);
+                break;
+            case 5:
+                pilhaExibir(&historico);
+                break;
+            case 6:
+                listaExibir(lista);
+                break;
+            case 7:
+                gerarRelatorio(historico.itens, historico.topo + 1);
+                break;
+            case 0:
+                printf("Obrigado! Volte sempre.\n");
+                break;
+            default:
+                printf("Opcao invalida.\n");
         }
-
     } while (opcao != 0);
 
     lista = listaApagar(lista);
