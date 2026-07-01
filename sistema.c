@@ -57,19 +57,25 @@ int filaCheia(Fila *f) {
 
 /* Insere cliente na fila */
 void filaInserir(Fila *f, Cliente c) {
+    // Verifica se a fila está cheia.
     if (filaCheia(f)) {
         return;
     }
 
+    // Calcula a próxima posição livre da fila.
     int fim = (f->inicio + f->quantidade) % TAM_FILA;
+    // Vetor itens recebe cliente na posição fim.
     f->itens[fim] = c;
+    // Incremente a quantidade de elementos na fila.
     f->quantidade++;
 }
 
 /* Remove e retorna o primeiro cliente da fila (prioridade gestante) */
 Cliente filaRemover(Fila *f) {
+    // Cria variável vazia.
     Cliente vazio = {0};
 
+    // Verifica se a fila está vazia.
     if (filaVazia(f)) {
         printf("Fila vazia.\n");
         return vazio;
@@ -78,43 +84,58 @@ Cliente filaRemover(Fila *f) {
     /* Encontra a posição do primeiro prioritário */
     int posicaoRemover = 0;
     for (int i = 0; i < f->quantidade; i++) {
+        // Captura posição do vetor que corresponde o loop
         int indice = (f->inicio + i) % TAM_FILA;
+        // Se for priorioritário salva a posição na fila
         if (f->itens[indice].prioritario == 1) {
             posicaoRemover = i;
             break;
         }
     }
 
+    // Captura a posição no vetor do elemento a ser removido.
     int indiceRemover = (f->inicio + posicaoRemover) % TAM_FILA;
+    // Pega o cliente que será removido.
     Cliente removido = f->itens[indiceRemover];
 
+    // Excessão caso seja o primeiro da fila.
     if (posicaoRemover == 0) {
+        // Avança o início da fila.
         f->inicio = (f->inicio + 1) % TAM_FILA;
+        // Decrementa a quantidade de elementos na fila.
         f->quantidade--;
+        // Retorna o cliente.
         return removido;
     }
 
-    /* Remove prioritário do meio da fila */
+    // Percorre a fila a partir do elemento que será removido
+    // Até o penúltimo elemento.
     for (int i = posicaoRemover; i < f->quantidade - 1; i++) {
         int destino = (f->inicio + i) % TAM_FILA;
         int origem = (f->inicio + i + 1) % TAM_FILA;
+        // Move o elemento de destino pra orgem.
         f->itens[destino] = f->itens[origem];
     }
+    // Decrementa a quantidade de elementos na fila.
     f->quantidade--;
 
+    // Retorna o cliente removido.
     return removido;
 }
 
 /* Exibe o estado atual da fila */
 void filaExibir(Fila *f) {
+    // Verifica se a fila está vazia.
     if (filaVazia(f)) {
         printf("Fila vazia.\n");
         return;
     }
 
     printf("--- Fila de espera ---\n");
+    // Percorre a quantidade de elementos 
     for (int i = 0; i < f->quantidade; i++) {
-        int posicao = (f->inicio + i) % TAM_FILA;
+        // Captura posição real do vetor
+        int posicao = (f->inicio + i) % TAM_FILA
         printf("Senha: %03d | Nome: %s\n",
                f->itens[posicao].senha,
                f->itens[posicao].nome);
@@ -344,15 +365,19 @@ void gerarRelatorio(Cliente historico[], int n) {
         return;
     }
 
+    // Cria um vetor auxiliar.
     Cliente aux[TAM_PILHA];
 
+    // Copia o histórico para o vetor auxiliar.
     for (int i = 0; i < n; i++) {
         aux[i] = historico[i];
     }
 
     printf("--- Relatorio ordenado ---\n");
+    // Ordena o vetor auxiliar por senha.
     ordenar(aux, n);
 
+    // Percorre o vetor ordenado e mostra os dados do clientes.
     for (int i = 0; i < n; i++) {
         printf("Senha: %03d | Nome: %s | CPF: %s | Prioritario: %s\n",
                aux[i].senha,
