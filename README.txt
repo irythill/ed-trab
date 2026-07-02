@@ -47,7 +47,10 @@ Vinicius Dos Santos Cardoso:
 
 2. Qual foi a maior dificuldade? Como resolveram?
 
-    (preencher)
+    A maior dificuldade foi pensar em como fazer a listaParaVetor, principalmente
+    pra entender que a gente tava copiando todos os dados da struct pra um vetor.
+    Depois que isso ficou claro, foi bem mais tranquilo montar a lógica e fazer
+    a conversão funcionar no sistema.
 
 3. Por que o algoritmo de busca sequencial e o algoritmo Bubble Sort
    para ordenação é adequado (ou não) para o contexto escolhido?
